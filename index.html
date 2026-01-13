@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE RUBIN | 喜马拉雅艺术中心</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -15,11 +14,11 @@
             --tibetan-red: #7b1e1e;     /* 僧袍红 */
             --antique-gold: #cfa95b;    /* 佛像金 */
             --dust-white: #e0e0e0;      /* 尘白 */
-            --font-main: 'Noto Serif SC', serif;
-            --font-deco: 'Cinzel', serif;
+            --font-main: 'Noto Serif SC', serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* 增加后备字体 */
+            --font-deco: 'Cinzel', serif, Georgia, 'Times New Roman', Times, serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* 隐藏默认鼠标，使用自定义光标 */ }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
             background-color: var(--void-black);
@@ -55,7 +54,7 @@
         .gold-txt { color: var(--antique-gold); }
         .uppercase { text-transform: uppercase; letter-spacing: 2px; }
 
-        /* --- 3. HERO SECTION (视差封面) --- */
+        /* --- 3. HERO SECTION (保持原背景图不变) --- */
         header {
             height: 100vh;
             position: relative;
@@ -63,12 +62,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #1a1a1a; /* 增加一个底色，万一图片挂了不至于全黑 */
         }
 
         .hero-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* 更加稳定的 Unsplash 图源 */
+            /* ⚠️ 严格按照要求，保留了原来的链接。如果这张图也看不到，说明你的网络屏蔽了 Unsplash */
             background: url('https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
             opacity: 0.5;
             transform: scale(1.1);
@@ -81,7 +81,7 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            mix-blend-mode: overlay; /* 高级混合模式 */
+            mix-blend-mode: overlay;
         }
 
         .hero-title {
@@ -118,7 +118,7 @@
         }
         .logo { font-family: var(--font-deco); font-weight: 700; font-size: 1.5rem; letter-spacing: 2px; }
 
-        /* --- 5. EXHIBITION GRID (画廊) --- */
+        /* --- 5. EXHIBITION GRID --- */
         .section-title {
             text-align: center;
             padding: 8rem 0 4rem;
@@ -136,12 +136,11 @@
         .art-card {
             position: relative;
             overflow: hidden;
-            background: #1a1a1a;
+            background: #222; /* 增加底色 */
             transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 复杂的网格布局 */
-        .art-card:nth-child(1) { grid-column: span 8; grid-row: span 2; } /* 主图 */
+        .art-card:nth-child(1) { grid-column: span 8; grid-row: span 2; } 
         .art-card:nth-child(2) { grid-column: span 4; grid-row: span 1; }
         .art-card:nth-child(3) { grid-column: span 4; grid-row: span 1; }
         .art-card:nth-child(4) { grid-column: span 6; grid-row: span 1; }
@@ -152,6 +151,7 @@
             object-fit: cover;
             transition: transform 1s ease;
             opacity: 0.8;
+            background-color: #333; /* 图片加载前的占位色 */
         }
 
         .art-info {
@@ -167,7 +167,7 @@
         .art-card:hover .art-info { transform: translateY(0); }
         .art-card:hover { z-index: 10; box-shadow: 0 10px 50px rgba(0,0,0,0.8); }
 
-        /* --- 6. FEATURED (图文错层) --- */
+        /* --- 6. FEATURED --- */
         .featured {
             background: var(--charcoal);
             padding: 8rem 0;
@@ -183,6 +183,8 @@
 
         .featured-img-box {
             position: relative;
+            background-color: #222;
+            min-height: 600px;
         }
 
         .featured-img-box::before {
@@ -200,14 +202,10 @@
             object-fit: cover;
             position: relative;
             z-index: 1;
-            /* 绿度母/佛像风格 */
-            filter: sepia(20%) contrast(1.1);
+            background-color: #333;
         }
 
-        .featured-text {
-            padding-left: 2rem;
-        }
-
+        .featured-text { padding-left: 2rem; }
         .featured-text h3 { font-size: 3rem; margin-bottom: 1.5rem; line-height: 1.2; }
         .btn-gold {
             margin-top: 2rem;
@@ -227,40 +225,36 @@
             color: #666;
         }
 
-        /* 动画关键帧 */
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* 图片加载失败时的样式 */
+        /* 图片加载失败时的最终后备样式 */
         img.error {
-            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 600'%3E%3Crect fill='%231a1a1a' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' fill='%23cfa95b' font-family='serif' font-size='24' text-anchor='middle'%3EIMAGE UNAVAILABLE%3C/text%3E%3C/svg%3E");
+            /* 如果连随机图床都挂了，显示这个 SVG 占位符 */
+            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 600'%3E%3Crect fill='%231a1a1a' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' fill='%23cfa95b' font-family='serif' font-size='24' text-anchor='middle'%3EIMAGE LOAD FAILED%3C/text%3E%3C/svg%3E");
         }
-        /* 视频区域容器 */
-.video-section {
-    padding: 6rem 10%;
-    background-color: #000; /* 纯黑背景，突出视频 */
-    text-align: center;
-}
 
-/* 视频外层包装（为了保持16:9比例且自适应手机） */
-.video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 的比例 */
-    height: 0;
-    overflow: hidden;
-    max-width: 1000px;
-    margin: 3rem auto 0;
-    border: 1px solid var(--antique-gold); /* 博物馆金边框 */
-    box-shadow: 0 0 30px rgba(207, 169, 91, 0.1); /* 金色微光 */
-}
+        .video-section {
+            padding: 6rem 10%;
+            background-color: #000;
+            text-align: center;
+        }
 
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 1000px;
+            margin: 3rem auto 0;
+            border: 1px solid var(--antique-gold);
+            box-shadow: 0 0 30px rgba(207, 169, 91, 0.1);
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
     </style>
 </head>
 <body>
@@ -284,13 +278,13 @@
     <section class="container featured">
         <div class="featured-content">
             <div class="featured-img-box">
-                <img src="https://images.unsplash.com/photo-1628062972944-70672e0d750c?q=80&w=2070&auto=format&fit=crop" alt="Green Tara" class="featured-img" onerror="this.classList.add('error')">
+                <img src="https://picsum.photos/seed/rubin1/800/1000" alt="Featured Art" class="featured-img" onerror="this.classList.add('error')">
             </div>
             <div class="featured-text">
                 <span class="gold-txt uppercase">Featured Work</span>
-                <h3>The Bodhisattva<br>of Compassion</h3>
-                <p>探索藏传佛教中最受尊崇的女性本尊——绿度母。她代表了慈悲与行动，能够从八种恐惧中解救众生。</p>
-                <p style="margin-top: 1rem; color: #888;">18th Century · Distemper on Cotton</p>
+                <h3>Museum Highlight</h3>
+                <p>馆藏精选作品展示。由于网络原因，当前显示的可能为随机艺术摄影替代图像，旨在展示网站布局效果。</p>
+                <p style="margin-top: 1rem; color: #888;">Collection Item · Mixed Media</p>
                 <a href="#" class="btn-gold uppercase">View Details</a>
             </div>
         </div>
@@ -301,55 +295,57 @@
             <span class="gold-txt uppercase">The Archive</span>
             <h2>馆藏精选</h2>
         </div>
-<section class="video-section">
-    <div class="section-title">
-        <span class="gold-txt uppercase">Documentary</span>
-        <h2>唐卡的诞生</h2>
-        <p style="color: #888; margin-top: 10px;">The Making of a Thangka</p>
-    </div>
 
-    <div class="video-wrapper">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/ykteMInqG7w?si=YbnZSeawRG4B-9G5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-</section>
-        <div class="art-grid">
+        <section class="video-section">
+            <div class="section-title" style="padding-top: 0;">
+                <span class="gold-txt uppercase">Documentary</span>
+                <h2>唐卡的诞生</h2>
+                <p style="color: #888; margin-top: 10px;">The Making of a Thangka</p>
+            </div>
+
+            <div class="video-wrapper">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/ykteMInqG7w?si=YbnZSeawRG4B-9G5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <div class="art-grid" style="margin-top: 4rem;">
             <div class="art-card">
-                <img src="https://images.unsplash.com/photo-1605479634282-e8c56c2c8f82?q=80&w=2000&auto=format&fit=crop" alt="Buddha" onerror="this.classList.add('error')">
+                <img src="https://picsum.photos/seed/rubin2/800/800" alt="Art Piece 1" onerror="this.classList.add('error')">
                 <div class="art-info">
-                    <h3 class="gold-txt">Shakyamuni Buddha</h3>
-                    <p>释迦牟尼佛 · 16世纪</p>
+                    <h3 class="gold-txt">Collection Item I</h3>
+                    <p>馆藏编号 001</p>
                 </div>
             </div>
 
             <div class="art-card">
-                <img src="https://images.unsplash.com/photo-1610484549303-34e56b4f7491?q=80&w=2070&auto=format&fit=crop" alt="Mandala Detail" onerror="this.classList.add('error')">
+                <img src="https://picsum.photos/seed/rubin3/800/600" alt="Art Piece 2" onerror="this.classList.add('error')">
                 <div class="art-info">
-                    <h3 class="gold-txt">Kalachakra</h3>
-                    <p>时轮金刚坛城</p>
+                    <h3 class="gold-txt">Collection Item II</h3>
+                    <p>馆藏编号 002</p>
                 </div>
             </div>
 
             <div class="art-card">
-                <img src="https://images.unsplash.com/photo-1599587440478-d450d0325492?q=80&w=2070&auto=format&fit=crop" alt="Ritual Mask" onerror="this.classList.add('error')">
+                <img src="https://picsum.photos/seed/rubin4/800/600" alt="Art Piece 3" onerror="this.classList.add('error')">
                 <div class="art-info">
-                    <h3 class="gold-txt">Mahakala Mask</h3>
-                    <p>大黑天面具 · 仪式法器</p>
+                    <h3 class="gold-txt">Collection Item III</h3>
+                    <p>馆藏编号 003</p>
                 </div>
             </div>
 
             <div class="art-card">
-                <img src="https://images.unsplash.com/photo-1518134789503-49d63c500c4c?q=80&w=2070&auto=format&fit=crop" alt="Temple Art" onerror="this.classList.add('error')">
+                <img src="https://picsum.photos/seed/rubin5/1000/600" alt="Art Piece 4" onerror="this.classList.add('error')">
                 <div class="art-info">
-                    <h3 class="gold-txt">Temple Murals</h3>
-                    <p>古格王朝壁画遗迹</p>
+                    <h3 class="gold-txt">Collection Item IV</h3>
+                    <p>馆藏编号 004</p>
                 </div>
             </div>
 
             <div class="art-card">
-                <img src="https://images.unsplash.com/photo-1526309867907-74400a4db0f5?q=80&w=2072&auto=format&fit=crop" alt="Scriptures" onerror="this.classList.add('error')">
+                <img src="https://picsum.photos/seed/rubin6/1000/600" alt="Art Piece 5" onerror="this.classList.add('error')">
                 <div class="art-info">
-                    <h3 class="gold-txt">Sutra Manuscripts</h3>
-                    <p>贝叶经手稿</p>
+                    <h3 class="gold-txt">Collection Item V</h3>
+                    <p>馆藏编号 005</p>
                 </div>
             </div>
         </div>
@@ -360,26 +356,24 @@
     </footer>
 
     <script>
-        // 鼠标跟随效果
         const cursorDot = document.getElementById('cursor-dot');
         const cursorCircle = document.getElementById('cursor-circle');
 
         document.addEventListener('mousemove', (e) => {
             cursorDot.style.left = e.clientX + 'px';
             cursorDot.style.top = e.clientY + 'px';
-            
-            // 让圆圈有一点延迟，产生拖尾效果
             setTimeout(() => {
                 cursorCircle.style.left = e.clientX + 'px';
                 cursorCircle.style.top = e.clientY + 'px';
             }, 50);
         });
 
-        // 简单的视差滚动
         window.addEventListener('scroll', () => {
             const scrolled = window.scrollY;
             const heroBg = document.querySelector('.hero-bg');
-            heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.5}px)`;
+            if(heroBg) {
+                heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.5}px)`;
+            }
         });
     </script>
 </body>
